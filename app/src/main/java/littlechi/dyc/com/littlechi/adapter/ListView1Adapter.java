@@ -8,12 +8,19 @@ import android.view.ViewGroup;
  */
 public class ListView1Adapter extends MyBaseAdapter {
 
+    
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public int getLayoutId() {
+        return 0;
+    }
+    @Override
+    public int[] getConvertItemIds() {
+        return new int[0];
+    }
 
+    @Override
+    public void initViews() {
 
-
-        return null;
     }
 }

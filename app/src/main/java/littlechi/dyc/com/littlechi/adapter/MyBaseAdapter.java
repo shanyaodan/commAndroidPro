@@ -44,20 +44,35 @@ public abstract class MyBaseAdapter extends android.widget.BaseAdapter {
         if (null == convertView) {
             vh = new ViewHolder();
             convertView = mInflater.inflate(getLayoutId(),null);
+            int[]ids = getConvertItemIds();
+            if(null == ids ) {
+                return null;
+            }
+          for(int a=0;a<ids.length;a++) {
+              vh.addView(convertView,ids[a]);
+          }
+            initViews();
 
         }
 
-        return null;
+        return convertView;
     }
    public abstract int getLayoutId();
-
+    public abstract int[]getConvertItemIds();
+    public abstract void initViews();
     class ViewHolder {
         SparseArray<View> viewArray = new SparseArray<View>();
-
-        public void addViews(View convertView, int id) {
+        public void addView(View convertView, int id) {
+            if(null == convertView) {
+                return ;
+            }
             View contentView = convertView.findViewById(id);
             viewArray.put(id, contentView);
         }
+        public View getView(int id){
+            return viewArray.get(id);
+        }
+
     }
 
 

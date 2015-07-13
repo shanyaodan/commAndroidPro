@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import littlechi.dyc.com.littlechi.entity.BaseEntity;
 
@@ -16,11 +17,15 @@ import littlechi.dyc.com.littlechi.entity.BaseEntity;
 public abstract class MyBaseAdapter extends android.widget.BaseAdapter {
 
 
-    private Context context;
-    private ArrayList<BaseEntity> entitys;
-    private LayoutInflater mInflater;
-    public void MyBaseAdapter(Context context, ArrayList<BaseEntity> entitys) {
+    protected Context context;
+    protected List entitys;
+    protected LayoutInflater mInflater;
+
+
+    public  MyBaseAdapter(Context context,List<? extends Object> entitys) {
         mInflater = LayoutInflater.from(context);
+        this.context = context;
+        this.entitys = entitys;
     }
 
     @Override
@@ -51,7 +56,9 @@ public abstract class MyBaseAdapter extends android.widget.BaseAdapter {
           for(int a=0;a<ids.length;a++) {
               vh.addView(convertView,ids[a]);
           }
-            initViews();
+            initViews(vh);
+
+        } else {
 
         }
 
@@ -59,8 +66,8 @@ public abstract class MyBaseAdapter extends android.widget.BaseAdapter {
     }
    public abstract int getLayoutId();
     public abstract int[]getConvertItemIds();
-    public abstract void initViews();
-    class ViewHolder {
+    public abstract void initViews(ViewHolder convertView);
+    public static   class ViewHolder {
         SparseArray<View> viewArray = new SparseArray<View>();
         public void addView(View convertView, int id) {
             if(null == convertView) {

@@ -16,11 +16,11 @@ public abstract class  BaseFragment extends Fragment {
 
 
     protected  ViewGroup rootView;
-    public Context context;
+    protected Context context;
 
     public abstract void initViews(ViewGroup rootView);
     public abstract int getLayoutId();
-
+    public abstract void setViews();
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -29,6 +29,7 @@ public abstract class  BaseFragment extends Fragment {
         rootView = (ViewGroup) inflater.inflate(getLayoutId(),container,false);
         initViews(rootView);
         }
+        setViews();
         return rootView;
     }
 

@@ -49,7 +49,6 @@ import littlechi.dyc.com.littlechi.utils.CommonUtils;
 
 public class PagerSlidingTabStrip extends HorizontalScrollView {
 
-    private int  selectedPosition;
     private int selectedTabTextColor;
 
     public interface IconTabProvider {
@@ -203,7 +202,6 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
             } else {
                 addTextTab(i, pager.getAdapter().getPageTitle(i).toString());
             }
-
         }
 
         updateTabStyles();
@@ -284,7 +282,7 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
                         tab.setText(tab.getText().toString().toUpperCase(locale));
                     }
                 }
-                if (i == selectedPosition) {
+                if (i == currentPosition) {
                     tab.setTextColor(selectedTabTextColor);
                 }
             }
@@ -355,6 +353,8 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
             View tab = tabsContainer.getChildAt(i);
             canvas.drawLine(tab.getRight(), dividerPadding, tab.getRight(), height - dividerPadding, dividerPaint);
         }
+
+        updateTabStyles();
     }
 
     private class PageListener implements OnPageChangeListener {
@@ -368,7 +368,6 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
             scrollToChild(position, (int) (positionOffset * tabsContainer.getChildAt(position).getWidth()));
 
             invalidate();
-
             if (delegatePageListener != null) {
                 delegatePageListener.onPageScrolled(position, positionOffset, positionOffsetPixels);
             }
@@ -387,6 +386,7 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
 
         @Override
         public void onPageSelected(int position) {
+
             if (delegatePageListener != null) {
                 delegatePageListener.onPageSelected(position);
             }

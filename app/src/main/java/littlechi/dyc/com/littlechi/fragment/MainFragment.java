@@ -1,99 +1,74 @@
 package littlechi.dyc.com.littlechi.fragment;
 
-import android.app.Activity;
-import android.content.Context;
-import android.content.res.Resources;
-import android.graphics.Color;
-import android.net.Uri;
-import android.os.Bundle;
-import android.app.Fragment;
-import android.util.DisplayMetrics;
-import android.util.TypedValue;
-import android.view.LayoutInflater;
+import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
 import littlechi.dyc.com.littlechi.R;
-import littlechi.dyc.com.littlechi.adapter.ViewPagerAdapter;
-import littlechi.dyc.com.littlechi.utils.CommonUtils;
-import littlechi.dyc.com.littlechi.view.PagerSlidingTabStrip;
-import littlechi.dyc.com.littlechi.xlistview.XListView;
+import littlechi.dyc.com.littlechi.adapter.ShoppingPosAdapter;
+import littlechi.dyc.com.littlechi.entity.ShopEntity;
+
+/**
+ * Created by Administrator on 2015/7/13.
+ */
+public class MainFragment extends  BaseFragment {
+
+    private EditText mm_location_name_edt;
+    private Button chi_position_btn;
+    private TextView chi_position_search_context_txt;
+    private Button  chi_reposition_btn;
+    private ListView chi_postion_result_lv;
 
 
-public class MainFragment extends BaseFragment {
-    private littlechi.dyc.com.littlechi.view.PagerSlidingTabStrip  tabStrip;
-    private android.support.v4.view.ViewPager  mypager;
 
-    public String TAG = ((Object) this).getClass().getSimpleName();
-    private View waitinglayout, errorlayout;
-
-
-
-    public static MainFragment newInstance(String param1, String param2) {
-        MainFragment fragment = new MainFragment();
-        return fragment;
-    }
     @Override
     public void initViews(ViewGroup rootView) {
-        tabStrip = (littlechi.dyc.com.littlechi.view.PagerSlidingTabStrip)rootView.findViewById(R.id.tabStrip_data);
-        mypager = (android.support.v4.view.ViewPager)rootView.findViewById(R.id.mypager_data);
-        initDetaildescPager();
+
+        mm_location_name_edt = (EditText)rootView.findViewById(R.id.mm_location_name_edt_data);
+        chi_position_btn = (Button)rootView.findViewById(R.id.chi_position_btn_data);
+        chi_position_search_context_txt = (TextView)rootView.findViewById(R.id.chi_position_search_context_txt_data);
+        chi_reposition_btn = (Button)rootView.findViewById(R.id.chi_reposition_btn);
+        chi_postion_result_lv = (ListView)rootView.findViewById(R.id.chi_postion_result_lv_data);
+
+
     }
-    private void initDetaildescPager() {
-        ArrayList<View> viewlist = new ArrayList<View>();
-        for(int a=0;a<3;a++) {
-            ViewGroup listView = (ViewGroup) LayoutInflater.from(context).inflate(R.layout.xlistview_with_infoview, null);
-            viewlist.add(listView);
-        }
-//        XListView xListView = .findViewById(R.id.xlistView)
-        ViewPagerAdapter adapter = new ViewPagerAdapter(context,viewlist,new String[] {"小吃店","投资顾问","投资经理"});
-        mypager.setAdapter(adapter);
-        tabStrip.setViewPager(mypager);
-        setTabsValue(tabStrip);
-    }
+
     @Override
     public int getLayoutId() {
-        return R.layout.fragment_main;
+        return R.layout.fragment_main ;
+
+
     }
+
     @Override
-    public void onDetach() {
-        super.onDetach();
+    public void setViews() {
+
+        ArrayList<ShopEntity> list = new ArrayList<ShopEntity>();
+
+        for(int a=0;a<10;a++) {
+
+            ShopEntity entity = new ShopEntity();
+            entity.distence = "200米";
+            entity.shopName = "小吃店"+a;
+            entity.postion = "玉泉路位置"+a ;
+            list.add(entity);
+        }
+        chi_postion_result_lv.setAdapter(new ShoppingPosAdapter(context,list));
+
+        chi_postion_result_lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                FragmentManager.setFragment((FragmentActivity)context,BaseFragment.getInstance(context,ShoppingListFragment.class.getName()));
+            }
+        });
     }
 
-    /**
-     * 对PagerSlidingTabStrip的各项属性进行赋值。
-     */
-    public void setTabsValue(PagerSlidingTabStrip tabs) {
 
-        DisplayMetrics dm = Resources.getSystem().getDisplayMetrics();
-
-        // 设置Tab是自动填充满屏幕的
-        tabs.setShouldExpand(true);
-        // 设置Tab的分割线是透明的'
-
-        tabs.setDividerColor(Color.TRANSPARENT);
-        // 设置Tab底部线的高度
-        tabs.setUnderlineHeight((int) TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_DIP, 1, dm));
-        // 设置Tab Indicator的高度
-        tabs.setIndicatorHeight((int) TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_DIP, 2, dm));
-        // 设置Tab标题文字的大小
-        // tabs.setTextColor(getResources().getColor(R.color.actionbar_background));
-        tabs.setTextColor(Color.parseColor("#0f0f0f"));
-        tabs.setTextSize(CommonUtils.getDementions(14));
-        // 设置Tab Indicator的颜色
-        // tabs.setIndicatorColor(Color.parseColor("#45c01a"));
-        tabs.setIndicatorColor(getResources().getColor(
-                R.color.baseColor));
-        // 设置选中Tab文字的颜色 (这是我自定义的一个方法)
-        // tabs.setSelectedTextColor(Color.parseColor("#45c01a"));
-        tabs.setSelectedTextColor(getResources().getColor(
-                R.color.baseColor));
-
-        // 取消点击Tab时的背景色
-        tabs.setTabBackground(0);
-    }
 }
